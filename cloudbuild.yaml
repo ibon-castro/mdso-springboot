@@ -23,16 +23,14 @@ steps:
       - '--quiet'
       - '--project=$PROJECT_ID'
 
-# Bucket for build logs
+# Logging configuration (use Cloud Logging or Stackdriver)
 options:
-  logging: CLOUD_LOGGING_ONLY
-  logs_bucket: gs://$LOGS_BUCKET_NAME
+  logging: CLOUD_LOGGING_ONLY  # Log build results to Cloud Logging (Stackdriver)
 
 # Substitutions for custom values like project ID and bucket name
 substitutions:
-  _PROJECT_ID: 'iboncas-proyecto'
-  _BUCKET_NAME: 'bucket-mdso'
-  _LOGS_BUCKET_NAME: 'logs-mdso'
+  _PROJECT_ID: 'iboncas-proyecto'  # Replace with your project ID
+  _BUCKET_NAME: 'bucket-mdso'  # Replace with your Cloud Storage bucket name
 
 # Timeout for Cloud Build process
 timeout: 1200s
