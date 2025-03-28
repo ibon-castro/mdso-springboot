@@ -21,7 +21,7 @@ steps:
       - 'app'
       - 'deploy'
       - '--quiet'
-      - '--project=$iboncas-proyecto'
+      - '--project=iboncas-proyecto'
 
 # Logging configuration (use Cloud Logging or Stackdriver)
 options:
