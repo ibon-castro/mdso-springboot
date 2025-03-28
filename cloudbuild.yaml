@@ -1,0 +1,32 @@
+steps:
+  # Step 1: Build the Spring Boot Application
+  - name: 'gcr.io/cloud-builders/maven'
+    id: 'Build Spring Boot Application'
+    entrypoint: 'mvn'
+    args: ['clean', 'package', '-DskipTests=true']
+
+  # Step 2: Store the generated JAR file in Google Cloud Storage
+  - name: 'gcr.io/cloud-builders/gsutil'
+    id: 'Store Artifacts in Cloud Storage'
+    args:
+      - 'cp'
+      - 'target/*.jar'
+      - 'gs://$BUCKET_NAME/springboot-artifacts/'
+
+  # Step 3: Deploy the application to Google App Engine
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Deploy to App Engine'
+    args:
+      - 'gcloud'
+      - 'app'
+      - 'deploy'
+      - '--quiet'
+      - '--project=$PROJECT_ID'
+
+# Substitutions for custom values like project ID and bucket name
+substitutions:
+  _PROJECT_ID: 'iboncas-proyecto'
+  _BUCKET_NAME: 'bucket-mdso'  # Replace with your Cloud Storage bucket name
+
+# Timeout for Cloud Build process
+timeout: 1200s
