@@ -1,6 +1,6 @@
 steps:
   # Step 1: Build the Spring Boot Application
-  - name: 'gcr.io/cloud-builders/maven'
+  - name: 'gcr.io/cloud-builders/maven:3.6.3-jdk-11'
     id: 'Build Spring Boot Application'
     entrypoint: 'mvn'
     args: ['clean', 'package', '-DskipTests=true']
