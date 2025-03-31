@@ -7,11 +7,15 @@ steps:
       - '-c'
       - 'chmod +x ./mvnw'
 
-  # Step 2: Build the Spring Boot Application using Maven Wrapper
+  # Step 2: Set JAVA_HOME environment variable and build Spring Boot application using Maven Wrapper
   - name: 'gcr.io/cloud-builders/mvn'
     id: 'Build Spring Boot Application'
-    entrypoint: './mvnw'  # Use the wrapper instead of mvn
-    args: ['clean', 'package', '-DskipTests=true']
+    entrypoint: 'bash'
+    env:
+      - 'JAVA_HOME=/usr/lib/jvm/java-17-openjdk'
+    args:
+      - '-c'
+      - './mvnw clean package -DskipTests=true'
 
   # Step 3: Run Snyk for Dependency Vulnerability Scanning
   - name: 'snyk/snyk-cli:npm'
