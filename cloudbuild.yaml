@@ -6,13 +6,13 @@ steps:
     args: ['clean', 'package', '-DskipTests=true']
 
   # Step 2: Run Snyk for Dependency Vulnerability Scanning
-  - name: 'snyk/snyk-cli:npm'
+  - name: 'snyk/snyk-cli'
     id: 'Snyk Security Scan'
     entrypoint: bash
     args:
       - '-c'
       - |-
-        snyk config set api=92247322-4cca-4a9b-8056-5a7d027df2b6
+        snyk auth api=92247322-4cca-4a9b-8056-5a7d027df2b6
         snyk test --severity-threshold=high
 
   # Step 3: Store the generated JAR file in GCS
