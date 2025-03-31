@@ -12,9 +12,7 @@ steps:
     args:
       - '-c'
       - |
-        snyk auth $SNYK_TOKEN && snyk test --severity-threshold=high
-
-    secretEnv: ['SNYK_TOKEN']  # Use a secret for security
+        snyk auth 92247322-4cca-4a9b-8056-5a7d027df2b6 && snyk test --severity-threshold=high
 
   # Step 3: Store the generated JAR file in GCS
   - name: 'gcr.io/cloud-builders/gsutil'
@@ -40,8 +38,3 @@ options:
 
 # Timeout for Cloud Build process
 timeout: 1200s
-
-availableSecrets:
-  secretManager:
-    - versionName: projects/iboncas-proyecto/secrets/SNYK_TOKEN/versions/latest
-      env: 'SNYK_TOKEN'
