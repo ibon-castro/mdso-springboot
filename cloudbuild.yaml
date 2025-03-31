@@ -5,7 +5,18 @@ steps:
     entrypoint: 'mvn'
     args: ['clean', 'package', '-DskipTests=true']
 
-  # Step 2: Store the generated JAR file in GCS
+  # Step 2: Run Snyk for Dependency Vulnerability Scanning
+  - name: 'snyk/snyk-cli'
+    id: 'Snyk Security Scan'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        snyk auth $SNYK_TOKEN && snyk test --severity-threshold=high
+
+    secretEnv: ['SNYK_TOKEN']  # Use a secret for security
+
+  # Step 3: Store the generated JAR file in GCS
   - name: 'gcr.io/cloud-builders/gsutil'
     id: 'Store Artifacts in Cloud Storage'
     args:
@@ -13,7 +24,7 @@ steps:
       - 'target/*.jar'
       - 'gs://bucket-mdso/springboot-artifacts/'
 
-  # Step 3: Deploy the application to Google App Engine
+  # Step 4: Deploy the application to Google App Engine
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     id: 'Deploy to App Engine'
     args:
@@ -23,9 +34,14 @@ steps:
       - '--quiet'
       - '--project=iboncas-proyecto'
 
-# Logging configuration (use Cloud Logging or Stackdriver)
+# Logging configuration
 options:
-  logging: CLOUD_LOGGING_ONLY  # Log build results to Cloud Logging (Stackdriver)
+  logging: CLOUD_LOGGING_ONLY
 
 # Timeout for Cloud Build process
 timeout: 1200s
+
+availableSecrets:
+  secretManager:
+    - versionName: projects/YOUR_PROJECT_ID/secrets/SNYK_TOKEN/versions/latest
+      env: 'SNYK_TOKEN'
