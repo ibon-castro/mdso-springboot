@@ -6,13 +6,14 @@ steps:
     args: ['clean', 'package', '-DskipTests=true']
 
   # Step 2: Run Snyk for Dependency Vulnerability Scanning
-  - name: 'snyk/snyk-cli'
+  - name: 'snyk/snyk-cli:npm'
     id: 'Snyk Security Scan'
-    entrypoint: 'sh'
+    entrypoint: bash
     args:
       - '-c'
-      - |
-        snyk auth 92247322-4cca-4a9b-8056-5a7d027df2b6 && snyk test --severity-threshold=high
+      - |-
+        snyk config set api=92247322-4cca-4a9b-8056-5a7d027df2b6
+        snyk test --severity-threshold=high
 
   # Step 3: Store the generated JAR file in GCS
   - name: 'gcr.io/cloud-builders/gsutil'
