@@ -43,5 +43,5 @@ timeout: 1200s
 
 availableSecrets:
   secretManager:
-    - versionName: projects/YOUR_PROJECT_ID/secrets/SNYK_TOKEN/versions/latest
+    - versionName: projects/iboncas-proyecto/secrets/SNYK_TOKEN/versions/latest
       env: 'SNYK_TOKEN'
