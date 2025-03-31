@@ -5,7 +5,7 @@ steps:
     entrypoint: 'mvn'
     args: ['clean', 'package', '-DskipTests=true']
 
-  # Step 2: Store the generated JAR file in Google Cloud Storage
+  # Step 2: Store the generated JAR file in GCS
   - name: 'gcr.io/cloud-builders/gsutil'
     id: 'Store Artifacts in Cloud Storage'
     args:
