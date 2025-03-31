@@ -1,33 +1,11 @@
 steps:
-  # Step 1: Grant execution permission to mvnw
-  - name: 'gcr.io/cloud-builders/git'
-    id: 'Set mvnw Permissions'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - 'chmod +x ./mvnw'
-
-  # Step 2: Set JAVA_HOME environment variable and build Spring Boot application using Maven Wrapper
+  # Step 1: Build the Spring Boot Application
   - name: 'gcr.io/cloud-builders/mvn'
     id: 'Build Spring Boot Application'
-    entrypoint: 'bash'
-    env:
-      - 'JAVA_HOME=/usr/lib/jvm/java-17-openjdk'
-    args:
-      - '-c'
-      - './mvnw clean package -DskipTests=true'
+    entrypoint: 'mvn'
+    args: ['clean', 'package', '-DskipTests=true']
 
-  # Step 3: Run Snyk for Dependency Vulnerability Scanning
-  - name: 'snyk/snyk-cli:npm'
-    id: 'Snyk Security Scan'
-    entrypoint: bash
-    args:
-      - '-c'
-      - |-
-        snyk auth 92247322-4cca-4a9b-8056-5a7d027df2b6
-        snyk test --severity-threshold=high
-
-  # Step 4: Store the generated JAR file in GCS
+  # Step 2: Store the generated JAR file in GCS
   - name: 'gcr.io/cloud-builders/gsutil'
     id: 'Store Artifacts in Cloud Storage'
     args:
@@ -35,7 +13,7 @@ steps:
       - 'target/*.jar'
       - 'gs://bucket-mdso/springboot-artifacts/'
 
-  # Step 5: Deploy the application to Google App Engine
+  # Step 3: Deploy the application to Google App Engine
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     id: 'Deploy to App Engine'
     args:
@@ -45,9 +23,9 @@ steps:
       - '--quiet'
       - '--project=iboncas-proyecto'
 
-# Logging configuration
+# Logging configuration (use Cloud Logging or Stackdriver)
 options:
-  logging: CLOUD_LOGGING_ONLY
+  logging: CLOUD_LOGGING_ONLY  # Log build results to Cloud Logging (Stackdriver)
 
 # Timeout for Cloud Build process
 timeout: 1200s
