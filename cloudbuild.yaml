@@ -6,7 +6,7 @@ steps:
     args: ['clean', 'package', '-DskipTests=true']
 
   # Step 2: Run Snyk for Dependency Vulnerability Scanning
-  - name: 'snyk/snyk-cli'
+  - name: 'snyk/snyk-cli:npm'
     id: 'Snyk Security Scan'
     entrypoint: bash
     args:
