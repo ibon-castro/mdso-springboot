@@ -5,7 +5,18 @@ steps:
     entrypoint: 'mvn'
     args: ['clean', 'package', '-DskipTests=true']
 
-  # Step 2: Store the generated JAR file in GCS
+  # Step 2: Run SonarCloud Analysis
+  - name: 'sonarsource/sonar-scanner-cli:latest'
+    id: 'SonarCloud Analysis'
+    args:
+      - '-Dsonar.host.url=https://sonarcloud.io'
+      - '-Dsonar.login=6a658a1e40e6eee045c739d45a50160b4c500f91'
+      - '-Dsonar.projectKey=ibon-castro_mdso-springboot'
+      - '-Dsonar.organization=iboncas-sonar'
+      - '-Dsonar.sources=.'
+      - '-Dsonar.java.binaries=target/classes'
+      
+  # Step 3: Store the generated JAR file in GCS
   - name: 'gcr.io/cloud-builders/gsutil'
     id: 'Store Artifacts in Cloud Storage'
     args:
@@ -13,7 +24,7 @@ steps:
       - 'target/*.jar'
       - 'gs://bucket-mdso/springboot-artifacts/'
 
-  # Step 3: Deploy the application to Google App Engine
+  # Step 4: Deploy the application to Google App Engine
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     id: 'Deploy to App Engine'
     args:
@@ -22,6 +33,12 @@ steps:
       - 'deploy'
       - '--quiet'
       - '--project=iboncas-proyecto'
+
+# Secret environment variables (SONAR_TOKEN stored securely)
+availableSecrets:
+  secretManager:
+    - versionName: projects/YOUR_PROJECT_ID/secrets/SONAR_TOKEN/versions/latest
+      env: 'SONAR_TOKEN'
 
 # Logging configuration (use Cloud Logging or Stackdriver)
 options:
