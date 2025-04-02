@@ -34,12 +34,6 @@ steps:
       - '--quiet'
       - '--project=iboncas-proyecto'
 
-# Secret environment variables (SONAR_TOKEN stored securely)
-availableSecrets:
-  secretManager:
-    - versionName: projects/YOUR_PROJECT_ID/secrets/SONAR_TOKEN/versions/latest
-      env: 'SONAR_TOKEN'
-
 # Logging configuration (use Cloud Logging or Stackdriver)
 options:
   logging: CLOUD_LOGGING_ONLY  # Log build results to Cloud Logging (Stackdriver)
