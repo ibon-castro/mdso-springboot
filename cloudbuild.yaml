@@ -45,5 +45,5 @@ timeout: 1200s
 # Secrets
 availableSecrets:
   secretManager:
-    - versionName: projects/$(gcloud config get-value project)/secrets/SONAR_TOKEN/versions/latest
+    - versionName: projects/281255367561/secrets/SONAR_TOKEN/versions/latest
       env: 'SONAR_TOKEN'
