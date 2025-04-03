@@ -18,7 +18,8 @@ steps:
         -Dsonar.projectKey=ibon-castro_mdso-springboot \
         -Dsonar.organization=iboncas-sonar \
         -Dsonar.sources=. \
-        -Dsonar.java.binaries=target/classes
+        -Dsonar.java.binaries=target/classes \
+        -Dsonar.working.directory=/tmp/sonar
     secretEnv: ['_SONAR_TOKEN']
 
       
