@@ -49,7 +49,7 @@ options:
 timeout: 1200s
 
 # Secrets
-availableSecrets:
-  secretManager:
-    - versionName: projects/iboncas-proyecto/secrets/SONAR_TOKEN/versions/latest
-      env: '_SONAR_TOKEN'
+#availableSecrets:
+#  secretManager:
+#    - versionName: projects/iboncas-proyecto/secrets/SONAR_TOKEN/versions/latest
+#      env: '_SONAR_TOKEN'
