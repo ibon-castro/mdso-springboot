@@ -10,12 +10,12 @@ steps:
     id: 'SonarCloud Analysis'
     args:
       - '-Dsonar.host.url=https://sonarcloud.io'
-      - '-Dsonar.login=$SONAR_TOKEN'
+      - '-Dsonar.login=$$_SONAR_TOKEN'
       - '-Dsonar.projectKey=ibon-castro_mdso-springboot'
       - '-Dsonar.organization=iboncas-sonar'
       - '-Dsonar.sources=.'
       - '-Dsonar.java.binaries=target/classes'
-    secretEnv: ['SONAR_TOKEN']
+    secretEnv: ['_SONAR_TOKEN']
       
   # Step 3: Store the generated JAR file in GCS
   - name: 'gcr.io/cloud-builders/gsutil'
@@ -46,4 +46,4 @@ timeout: 1200s
 availableSecrets:
   secretManager:
     - versionName: projects/iboncas-proyecto/secrets/SONAR_TOKEN/versions/latest
-      env: 'SONAR_TOKEN'
+      env: '_SONAR_TOKEN'
