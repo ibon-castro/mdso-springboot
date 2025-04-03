@@ -6,21 +6,21 @@ steps:
     args: ['clean', 'package', '-DskipTests=true']
 
   # Step 2: Run SonarCloud Analysis
-  - name: 'sonarsource/sonar-scanner-cli:latest'
-    id: 'SonarCloud Analysis'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        sonar-scanner \
-        -Dsonar.host.url=https://sonarcloud.io \
-        -Dsonar.login="$$_SONAR_TOKEN" \
-        -Dsonar.projectKey=ibon-castro_mdso-springboot \
-        -Dsonar.organization=iboncas-sonar \
-        -Dsonar.sources=. \
-        -Dsonar.java.binaries=target/classes \
-        -Dsonar.working.directory=/tmp/sonar
-    secretEnv: ['_SONAR_TOKEN']
+  #- name: 'sonarsource/sonar-scanner-cli:latest'
+  #  id: 'SonarCloud Analysis'
+  #  entrypoint: 'bash'
+  #  args:
+  #    - '-c'
+  #    - |
+  #      sonar-scanner \
+  #      -Dsonar.host.url=https://sonarcloud.io \
+  #      -Dsonar.login="$$_SONAR_TOKEN" \
+  #      -Dsonar.projectKey=ibon-castro_mdso-springboot \
+  #      -Dsonar.organization=iboncas-sonar \
+  #      -Dsonar.sources=. \
+  #      -Dsonar.java.binaries=target/classes \
+  #      -Dsonar.working.directory=/tmp/sonar
+  #  secretEnv: ['_SONAR_TOKEN']
 
       
   # Step 3: Store the generated JAR file in GCS
