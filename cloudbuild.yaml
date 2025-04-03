@@ -23,7 +23,7 @@ steps:
       - "-c"
       - |
         echo "Verifying secrets are available:"
-        echo "SONAR_TOKEN length: ${#_SONAR_TOKEN}"
+        echo "SONAR_TOKEN length: $$_SONAR_TOKEN"
     secretEnv: ["_SONAR_TOKEN"]
       
   # Step 3: Store the generated JAR file in GCS
