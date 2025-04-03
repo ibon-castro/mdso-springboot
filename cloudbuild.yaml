@@ -10,7 +10,7 @@ steps:
     id: 'SonarCloud Analysis'
     args:
       - '-Dsonar.host.url=https://sonarcloud.io'
-      - '-Dsonar.login=$$SONAR_TOKEN'
+      - '-Dsonar.login=$SONAR_TOKEN'
       - '-Dsonar.projectKey=ibon-castro_mdso-springboot'
       - '-Dsonar.organization=iboncas-sonar'
       - '-Dsonar.sources=.'
