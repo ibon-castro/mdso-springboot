@@ -8,23 +8,19 @@ steps:
   # Step 2: Run SonarCloud Analysis
   - name: 'sonarsource/sonar-scanner-cli:latest'
     id: 'SonarCloud Analysis'
+    entrypoint: 'bash'
     args:
-      - '-Dsonar.host.url=https://sonarcloud.io'
-      - '-Dsonar.login=$$_SONAR_TOKEN'
-      - '-Dsonar.projectKey=ibon-castro_mdso-springboot'
-      - '-Dsonar.organization=iboncas-sonar'
-      - '-Dsonar.sources=.'
-      - '-Dsonar.java.binaries=target/classes'
+      - '-c'
+      - |
+        sonar-scanner \
+        -Dsonar.host.url=https://sonarcloud.io \
+        -Dsonar.login="$$_SONAR_TOKEN" \
+        -Dsonar.projectKey=ibon-castro_mdso-springboot \
+        -Dsonar.organization=iboncas-sonar \
+        -Dsonar.sources=. \
+        -Dsonar.java.binaries=target/classes
     secretEnv: ['_SONAR_TOKEN']
-  #- name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-  #  id: "verify-secrets"
-  #  entrypoint: "bash"
-  #  args:
-  #    - "-c"
-  #    - |
-  #      echo "Verifying secrets are available:"
-  #      echo "SONAR_TOKEN length: $$_SONAR_TOKEN"
-  #  secretEnv: ["_SONAR_TOKEN"]
+
       
   # Step 3: Store the generated JAR file in GCS
   - name: 'gcr.io/cloud-builders/gsutil'
