@@ -41,8 +41,7 @@ steps:
       - '--quiet'
       - '--project=iboncas-proyecto'
 
-  # Step 6: 
-  # Step 5: OWASP ZAP DAST Scan
+  # Step 6: OWASP ZAP DAST Scan
   - name: 'ubuntu'
     entrypoint: bash
     args:
@@ -55,7 +54,8 @@ steps:
         mkdir zap
         tar -xvf ZAP_2.16.1_Linux.tar.gz
         cd ZAP_2.16.1
-        ./zap.sh -cmd -quickurl https://iboncas-proyecto.ue.r.appspot.com -quickprogress -quickout ../zap_report.html
+        ./zap.sh -t https://iboncas-proyecto.ue.r.appspot.com -r zap_report.html
+        cat zap_report.html
 
 # Logging configuration (use Cloud Logging or Stackdriver)
 options:
