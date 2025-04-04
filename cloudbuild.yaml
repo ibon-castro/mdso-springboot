@@ -5,7 +5,7 @@ steps:
     entrypoint: 'mvn'
     args: ['clean', 'package', '-DskipTests=true']
 
-  # Step 2: Run SonarCloud Analysis
+  # Step 3: Run SonarCloud Analysis
   #- name: 'sonarsource/sonar-scanner-cli:latest'
   #  id: 'SonarCloud Analysis'
   #  entrypoint: 'bash'
@@ -23,7 +23,7 @@ steps:
   #  secretEnv: ['_SONAR_TOKEN']
 
       
-  # Step 3: Store the generated JAR file in GCS
+  # Step 4: Store the generated JAR file in GCS
   - name: 'gcr.io/cloud-builders/gsutil'
     id: 'Store Artifacts in Cloud Storage'
     args:
@@ -31,7 +31,7 @@ steps:
       - 'target/*.jar'
       - 'gs://bucket-mdso/springboot-artifacts/'
 
-  # Step 4: Deploy the application to Google App Engine
+  # Step 5: Deploy the application to Google App Engine
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     id: 'Deploy to App Engine'
     args:
@@ -40,6 +40,22 @@ steps:
       - 'deploy'
       - '--quiet'
       - '--project=iboncas-proyecto'
+
+  # Step 6: 
+  # Step 5: OWASP ZAP DAST Scan
+  - name: 'ubuntu'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |-
+        apt-get update
+        apt-get -y install wget
+        apt-get -y install default-jdk
+        wget https://github.com/zaproxy/zaproxy/releases/download/v2.11.1/ZAP_2.11.1_Linux.tar.gz
+        mkdir zap
+        tar -xvf ZAP_2.11.1_Linux.tar.gz
+        cd ZAP_2.11.1
+        ./zap.sh -cmd -quickurl https://iboncas-proyecto.ue.r.appspot.com -quickprogress -quickout ../zap_report.html
 
 # Logging configuration (use Cloud Logging or Stackdriver)
 options:
