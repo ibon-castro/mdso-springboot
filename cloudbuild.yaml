@@ -5,6 +5,15 @@ steps:
     entrypoint: 'mvn'
     args: ['clean', 'package', '-DskipTests=true']
 
+  # Step 2: Run Snyk Analysis
+  - name: 'ubuntu'
+    entrypoint: bash
+    args: 
+        - '-c'
+        - |-
+          echo "$$_SNYK_TOKEN"
+    secretEnv: ['_SNYK_TOKEN']
+
   # Step 3: Run SonarCloud Analysis
   #- name: 'sonarsource/sonar-scanner-cli:latest'
   #  id: 'SonarCloud Analysis'
@@ -42,25 +51,25 @@ steps:
       - '--project=iboncas-proyecto'
 
   # Step 6: OWASP ZAP DAST Scan
-  - name: 'ubuntu'
-    entrypoint: bash
-    args:
-      - '-c'
-      - |-
-        apt-get update
-        apt-get -y install wget
-        apt-get -y install default-jdk
-        wget https://github.com/zaproxy/zaproxy/releases/download/v2.16.1/ZAP_2.16.1_Linux.tar.gz
-        mkdir zap
-        tar -xvf ZAP_2.16.1_Linux.tar.gz
-        cd ZAP_2.16.1
-        ./zap.sh -cmd -quickurl https://iboncas-proyecto.ue.r.appspot.com -quickprogress -quickout ../zap_report.html
+  #- name: 'ubuntu'
+  #  entrypoint: bash
+  #  args:
+  #    - '-c'
+  #    - |-
+  #      apt-get update
+  #      apt-get -y install wget
+  #      apt-get -y install default-jdk
+  #      wget https://github.com/zaproxy/zaproxy/releases/download/v2.16.1/ZAP_2.16.1_Linux.tar.gz
+  #      mkdir zap
+  #      tar -xvf ZAP_2.16.1_Linux.tar.gz
+  #      cd ZAP_2.16.1
+  #      ./zap.sh -cmd -quickurl https://iboncas-proyecto.ue.r.appspot.com -quickprogress -quickout ../zap_report.html
 
-artifacts:
-  objects:
-    location: 'gs://bucket-mdso'
-    paths:
-      - zap_report.html
+#artifacts:
+#  objects:
+#    location: 'gs://bucket-mdso'
+#    paths:
+#      - zap_report.html
 
 # Logging configuration (use Cloud Logging or Stackdriver)
 options:
@@ -70,7 +79,9 @@ options:
 timeout: 1200s
 
 # Secrets
-#availableSecrets:
-#  secretManager:
+availableSecrets:
+  secretManager:
+    - versionName: projects/iboncas-proyecto/secrets/SNYK_TOKEN/versions/latest
+      env: '_SNYK_TOKEN'
 #    - versionName: projects/iboncas-proyecto/secrets/SONAR_TOKEN/versions/latest
 #      env: '_SONAR_TOKEN'
