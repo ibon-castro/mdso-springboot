@@ -5,13 +5,23 @@ steps:
     entrypoint: 'mvn'
     args: ['clean', 'package', '-DskipTests=true']
 
-  # Step 2: Run Snyk Analysis
+    # Step 2: Run Snyk Code Analysis
   - name: 'ubuntu'
+    id: 'Snyk Code Scan'
     entrypoint: bash
-    args: 
-        - '-c'
-        - |-
-          echo "$$_SNYK_TOKEN"
+    args:
+      - '-c'
+      - |-
+        apt-get update && apt-get install -y curl
+        curl https://static.snyk.io/cli/latest/snyk-linux -o snyk
+        chmod +x ./snyk
+        mv ./snyk /usr/local/bin/
+
+        # Authenticate with token from Secret Manager
+        snyk config set api=$$_SNYK_TOKEN
+
+        # Run Snyk code test
+        snyk code test --org=5bc725e2-a6e4-4859-b783-5279cf1c64e0 || true
     secretEnv: ['_SNYK_TOKEN']
 
   # Step 3: Run SonarCloud Analysis
