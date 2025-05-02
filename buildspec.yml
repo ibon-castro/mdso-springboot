@@ -13,6 +13,6 @@ phases:
       - ./mvnw clean install
 artifacts:
   files:
-    - target/*.jar
+    - appspec.yml
     - scripts/**
     - target/**
