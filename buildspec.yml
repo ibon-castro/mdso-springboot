@@ -4,6 +4,9 @@ phases:
   install:
     runtime-versions:
       java: corretto17
+    commands:
+      - echo Installing dependencies
+      - chmod +x ./mvnw  # <--- add this line
   build:
     commands:
       - echo Build started on `date`
