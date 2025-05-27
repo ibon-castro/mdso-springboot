@@ -14,17 +14,12 @@ pipeline {
             }
         }
 
-                stage('Semgrep Scan') {
+        stage('Semgrep Scan') {
             steps {
-                // Install Semgrep if not already installed
                 sh '''
-                    if ! command -v semgrep &> /dev/null; then
-                        pip install semgrep
-                    fi
+                    docker run --rm -v $PWD:/src returntocorp/semgrep semgrep scan \
+                      --config=auto --json > semgrep-report.json
                 '''
-
-                // Run semgrep with default rules
-                sh 'semgrep scan --config=auto --json > semgrep-report.json'
             }
         }
 
