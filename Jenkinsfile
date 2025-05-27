@@ -17,7 +17,7 @@ pipeline {
         stage('Semgrep Scan') {
             steps {
                 sh '''
-                    docker run --rm -v $PWD:/src returntocorp/semgrep semgrep scan \
+                    sudo docker run --rm -v $PWD:/src returntocorp/semgrep semgrep scan \
                       --config=auto --json > semgrep-report.json
                 '''
             }
