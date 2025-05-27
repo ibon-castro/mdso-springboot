@@ -14,6 +14,12 @@ pipeline {
             }
         }
 
+        stage('Semgrep Scan') {
+            steps {
+                sh 'semgrep scan --config=auto --json > semgrep-report.json'
+            }
+        }
+
         stage('Build') {
             steps {
                 sh 'mvn clean package -DskipTests'
