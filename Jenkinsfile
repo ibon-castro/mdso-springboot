@@ -14,11 +14,20 @@ pipeline {
             }
         }
 
-        stage('Semgrep Scan') {
+                stage('Semgrep Scan') {
             steps {
+                // Install Semgrep if not already installed
+                sh '''
+                    if ! command -v semgrep &> /dev/null; then
+                        pip install semgrep
+                    fi
+                '''
+
+                // Run semgrep with default rules
                 sh 'semgrep scan --config=auto --json > semgrep-report.json'
             }
         }
+
 
         stage('Build') {
             steps {
