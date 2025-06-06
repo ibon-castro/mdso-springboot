@@ -7,9 +7,9 @@ pipeline {
     }
 
     environment {
-        DEFECTDOJO_URL = 'http://localhost:8080/api/v2/import-scan/' // adjust if needed
+        DEFECTDOJO_URL = 'http://localhost:8080/api/v2/import-scan/'
         SCAN_TYPE = 'Semgrep JSON Report'
-        TEST_ID = '14' // replace with your actual test ID in DefectDojo
+        TEST_ID = '1'
         TAGS = 'semgrep, automated'
     }
 
