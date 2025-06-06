@@ -56,7 +56,8 @@ pipeline {
                           -F 'file=@${reportFile};type=application/json' \\
                           -F 'scan_type=${SCAN_TYPE}' \\
                           -F 'test=${TEST_ID}' \\
-                          -F 'product_name=mdso-springboot'
+                          -F 'product_name=mdso-springboot' \\
+                          -F 'engagement_name=2025-06-06'
                     """
                 }
             }
