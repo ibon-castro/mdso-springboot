@@ -37,7 +37,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, DaoAuthenticationProvider authenticationProvider) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
             .authenticationProvider(authenticationProvider)
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
