@@ -2,9 +2,15 @@ pipeline {
     agent any
 
     tools {
-        // Use names you configured in Global Tool Configuration
         jdk 'JDK'
         maven 'MVN'
+    }
+
+    environment {
+        DEFECTDOJO_URL = 'http://localhost:8080/api/v2/import-scan/' // adjust if needed
+        SCAN_TYPE = 'Semgrep JSON Report'
+        TEST_ID = '14' // replace with your actual test ID in DefectDojo
+        TAGS = 'semgrep, automated'
     }
 
     stages {
@@ -23,7 +29,6 @@ pipeline {
             }
         }
 
-
         stage('Build') {
             steps {
                 sh 'mvn clean package -DskipTests'
@@ -32,7 +37,29 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh 'mvn spring-boot:run'
+                sh 'mvn spring-boot:run & sleep 10' // start app briefly if needed
+            }
+        }
+    }
+
+    post {
+        always {
+            withCredentials([string(credentialsId: 'Defect_Dojo_Api_Key', variable: 'API_KEY')]) {
+                script {
+                    def reportFile = "semgrep-report.json"
+
+                    sh """
+                        curl -X POST \\
+                          '${DEFECTDOJO_URL}' \\
+                          -H 'accept: application/json' \\
+                          -H 'Authorization: Token ${API_KEY}' \\
+                          -H 'Content-Type: multipart/form-data' \\
+                          -F 'file=@${reportFile};type=application/json' \\
+                          -F 'scan_type=${SCAN_TYPE}' \\
+                          -F 'test=${TEST_ID}' \\
+                          -F 'tags=${TAGS}'
+                    """
+                }
             }
         }
     }
