@@ -10,7 +10,6 @@ pipeline {
         DEFECTDOJO_URL = 'http://localhost:8080/api/v2/import-scan/'
         SCAN_TYPE = 'Semgrep JSON Report'
         TEST_ID = '1'
-        TAGS = 'semgrep, automated'
     }
 
     stages {
@@ -57,7 +56,7 @@ pipeline {
                           -F 'file=@${reportFile};type=application/json' \\
                           -F 'scan_type=${SCAN_TYPE}' \\
                           -F 'test=${TEST_ID}' \\
-                          -F 'tags=${TAGS}'
+                          -F 'product_name=mdso-springboot'
                     """
                 }
             }
