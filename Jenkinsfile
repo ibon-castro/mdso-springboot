@@ -36,7 +36,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh 'mvn spring-boot:run & sleep 10' // start app briefly if needed
+                sh 'nohup mvn spring-boot:run > app.log 2>&1 &'
             }
         }
     }
